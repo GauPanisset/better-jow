@@ -1,6 +1,6 @@
+import '@/assets/globals.css';
+
 export default defineContentScript({
-  matches: ['<all_urls>'],
-  main() {
-    console.log('Hello content.');
-  },
+  matches: ['*://jow.fr/*'],
+  main() {},
 });
