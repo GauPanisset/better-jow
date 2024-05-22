@@ -14,6 +14,8 @@ const SuggestionButton: React.FunctionComponent<Props> = ({
   originalButton,
 }) => {
   const [count, setCount] = useState(5);
+  const [isLoading, setIsLoading] = useState(false);
+
   const jowClient = useMemo(getJowClient, []);
 
   useEffect(() => {
@@ -32,6 +34,7 @@ const SuggestionButton: React.FunctionComponent<Props> = ({
   }, [originalButton]);
 
   const createShoppingListWithBetterSuggestions = async () => {
+    setIsLoading(true);
     const suggestions = await getBetterSuggestions(count);
     await jowClient.createShoppingList(suggestions);
     window.location.replace('/grocery/shopping-list');
@@ -43,10 +46,26 @@ const SuggestionButton: React.FunctionComponent<Props> = ({
 
   return (
     <JowButton
+      disabled={isLoading}
       onClick={createShoppingListWithBetterSuggestions}
-      className="animate-shimmer bg-[linear-gradient(110deg,hsl(var(--primary)),40%,hsl(var(--accent)),60%,hsl(var(--primary)))] bg-[length:300%_100%] hover:animate-none hover:bg-primary/90 hover:bg-none hover:bg-[length:100%_100%]"
+      className="animate-shimmer bg-[linear-gradient(110deg,hsl(var(--primary)),40%,hsl(var(--accent)),60%,hsl(var(--primary)))] bg-[length:300%_100%] hover:bg-primary/90 hover:bg-none disabled:bg-none"
     >
-      C'est parti !
+      C'est parti
+      {isLoading ? (
+        <span className="inline-flex">
+          {[0, 0.08, 0.16].map((delay) => (
+            <span
+              key={delay}
+              style={{ animationDelay: `${delay}s` }}
+              className="animate-bounce text-4xl"
+            >
+              .
+            </span>
+          ))}
+        </span>
+      ) : (
+        ' !'
+      )}
     </JowButton>
   );
 };
