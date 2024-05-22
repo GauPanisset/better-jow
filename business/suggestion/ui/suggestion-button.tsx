@@ -42,7 +42,10 @@ const SuggestionButton: React.FunctionComponent<Props> = ({
   }, [originalButton]);
 
   return (
-    <JowButton onClick={createShoppingListWithBetterSuggestions}>
+    <JowButton
+      onClick={createShoppingListWithBetterSuggestions}
+      className="animate-shimmer bg-[linear-gradient(110deg,hsl(var(--primary)),40%,hsl(var(--accent)),60%,hsl(var(--primary)))] bg-[length:300%_100%] hover:animate-none hover:bg-primary/90 hover:bg-none hover:bg-[length:100%_100%]"
+    >
       C'est parti !
     </JowButton>
   );
