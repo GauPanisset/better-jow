@@ -4,6 +4,7 @@ import { defaultSettings, settingsStorageKey } from '../constants';
 import { Settings } from '../model/settings';
 
 const useSettings = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
 
   /**
@@ -17,6 +18,7 @@ const useSettings = () => {
       } else {
         setSettings(localSettings);
       }
+      setIsLoading(false);
     };
 
     initiateSettings();
@@ -52,7 +54,7 @@ const useSettings = () => {
     storage.setItem(settingsStorageKey, newSettings);
   };
 
-  return { settings, updateSettings };
+  return { settings, updateSettings, isLoading };
 };
 
 export { useSettings };

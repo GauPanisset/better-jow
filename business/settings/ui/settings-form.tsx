@@ -31,16 +31,20 @@ const SettingsForm = () => {
    * is successfully submitted.
    */
   const [justSubmitted, setJustSubmitted] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const form = useForm<Settings>({
     resolver: zodResolver(settingsSchema),
     defaultValues: defaultSettings,
   });
-  const { settings, updateSettings } = useSettings();
+  const { isLoading, settings, updateSettings } = useSettings();
 
   useEffect(() => {
     form.reset(settings);
-  }, [form, settings]);
+    if (!isLoading) {
+      setIsReady(true);
+    }
+  }, [form, isLoading, settings]);
 
   /**
    * Handle the success message display time.
@@ -61,6 +65,10 @@ const SettingsForm = () => {
     updateSettings(newSettings);
     setJustSubmitted(true);
   };
+
+  if (!isReady) {
+    return null;
+  }
 
   return (
     <Form {...form}>
