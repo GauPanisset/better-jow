@@ -38,6 +38,16 @@ const useSettings = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (browser.action) {
+      browser.action.setIcon({
+        path: settings.active
+          ? '/better-jow-logo.svg'
+          : '/better-jow-logo-disabled.svg',
+      });
+    }
+  }, [settings.active]);
+
   const updateSettings = async (newSettings: Settings) => {
     storage.setItem(settingsStorageKey, newSettings);
   };
