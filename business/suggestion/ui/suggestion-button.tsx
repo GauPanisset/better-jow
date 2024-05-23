@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { useSettings } from '@/business/settings/services/use-settings';
 import { listenToValueChange } from '@/technical/helpers/listen-to-value-change';
 import { getJowClient } from '@/technical/jow/services/jow-client';
 import { JowButton } from '@/technical/jow/ui/jow-button';
@@ -18,6 +19,8 @@ const SuggestionButton: React.FunctionComponent<Props> = ({
 
   const jowClient = useMemo(getJowClient, []);
 
+  const { settings } = useSettings();
+
   useEffect(() => {
     const countInput = originalButton.parentElement?.querySelector('input');
     if (!countInput) {
@@ -33,6 +36,15 @@ const SuggestionButton: React.FunctionComponent<Props> = ({
     };
   }, [originalButton]);
 
+  useEffect(() => {
+    if (settings.active) {
+      originalButton.style.display = 'none';
+    }
+    return () => {
+      originalButton.style.display = '';
+    };
+  }, [originalButton, settings]);
+
   const createShoppingListWithBetterSuggestions = async () => {
     setIsLoading(true);
     const suggestions = await getBetterSuggestions(count);
@@ -40,9 +52,9 @@ const SuggestionButton: React.FunctionComponent<Props> = ({
     window.location.replace('/grocery/shopping-list');
   };
 
-  useEffect(() => {
-    originalButton.style.display = 'none';
-  }, [originalButton]);
+  if (!settings.active) {
+    return null;
+  }
 
   return (
     <JowButton
